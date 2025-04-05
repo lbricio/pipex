@@ -1,0 +1,33 @@
+PROG	= pipex
+
+SRCS 	= srcs/pipex.c srcs/utils.c
+OBJS 	= ${SRCS:.c=.o}
+MAIN	= srcs/pipex.c
+
+HEADER	= -Iincludes
+
+CC 		= cc
+CFLAGS 	= -Wall -Wextra -Werror -g
+
+.c.o:		%.o : %.c
+					@gcc ${CFLAGS} ${HEADER} -c $< -o $(<:.c=.o)
+
+all: 		${PROG}
+
+${PROG}:	${OBJS}
+					@echo "\033[33m----Compiling lib----"
+					@make re -C ./libft
+					@$(CC) ${OBJS} -Llibft -lft -o ${PROG}
+
+clean:
+					@make clean -C ./libft
+					@rm -f ${OBJS} ${OBJS_B}
+
+fclean: 	clean
+					@make fclean -C ./libft
+					@rm -f $(NAME)
+					@rm -f ${PROG}
+
+re:			fclean all
+
+.PHONY: all clean fclean re
